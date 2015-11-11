@@ -1,0 +1,46 @@
+<html>
+	<head>
+		<title>WebGL - 3D Objects</title>
+		<meta http-equive="Content-Type" content="text/html; charset=utf-8">
+		<link rel="stylesheet" href="./style/webgl.css" type="text/css">
+		<script  src="./scripts/glMatrix-0.9.5.min.js" type="text/javascript"></script>
+		<script src ="./scripts/3dobjects.js" type="text/javascript"></script>
+
+		<!-- Fragment shader -->
+		<script id="shader-fs" type="x-shader/x-fragment">
+			precision mediump float;
+			varying vec4 vColor;
+			void main(void) {
+				gl_FragColor = vColor;
+			}
+		</script>
+
+		<!-- Vertex shader -->
+		<script id="shader-vs" type="x-shader/x-vertex">
+			attribute vec3 aVertexPosition;
+			attribute vec4 aVertexColor;
+
+				uniform mat4 uMVMatrix; //model view
+				uniform mat4 uPMatrix; //projection
+
+			varying vec4 vColor; //prehodni tip spremenljivke
+
+			void main(void) {
+				gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
+				vColor = aVertexColor;
+			}
+		</script>
+
+	</head>
+
+	<body onload="start()">
+		<h1>WebGL - 3D Objects</h1>
+		<div>
+			<canvas id="glcanvas" width="1280px" height="720px">
+				No <code>&lt;canvas&gt;</code> support in your browser.
+			</canvas>
+			<br />
+			<a href="./"><- Back</a>
+		</div>
+	</body>
+</html>
