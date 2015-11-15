@@ -1,122 +1,240 @@
 <html>
 <head>
-   <meta charset="utf-8">
-   <title>Labirint</title>
-
-   <style>
-      html, body {
-         overflow: hidden;
-         width: 100%;
-         height: 100%;
-         margin: 0;
-         padding: 0;
-      }
-
-      #renderCanvas {
-         width: 100%;
-         height: 100%;
-         touch-action: none;
-      }
-   </style>
-
-   <script src="./scripts/babylon.js"></script>
-   <script src="./scripts/hand.js"></script>
-   <script src="./scripts/cannon.js"></script>  <!-- optional physics engine -->
-</head>
-
-<body>
-   <canvas id="renderCanvas"></canvas>
-
-   <script type="text/javascript">
-   	if (BABYLON.Engine.isSupported()) {
-      var canvas = document.getElementById("renderCanvas");
-      var engine = new BABYLON.Engine(canvas, true);
-
-      var createScene = function () {
-         var scene = new BABYLON.Scene(engine);
-         scene.clearColor = new BABYLON.Color3(0, 1, 0);
-         //var light = new BABYLON.PointLight("Omni", new BABYLON.Vector3(20, 20, 100), scene);
-         var light0 = new BABYLON.HemisphericLight("Hemi0", new BABYLON.Vector3(0, 1, 0), scene);
-         light0.diffuse = new BABYLON.Color3(1, 1, 1);
-         light0.specular = new BABYLON.Color3(1, 1, 1);
-         light0.groundColor = new BABYLON.Color3(0, 0, 0);
-
-         var camera = new BABYLON.FreeCamera("FreeCamera", new BABYLON.Vector3(0, -4, -20), scene);
-         camera.attachControl(canvas, true);
-
-        // nadomestna tla
-        var ground = BABYLON.Mesh.CreatePlane("ground", 500.0, scene);
-        ground.material = new BABYLON.StandardMaterial("groundMat", scene);
-        ground.material.diffuseColor = new BABYLON.Color3(0, 0, 0);
-        ground.material.backFaceCulling = true;
-        ground.position = new BABYLON.Vector3(0, -9.99, 0);
-        ground.rotation = new BABYLON.Vector3(Math.PI / 2, 0, 0);
-        ground.checkCollisions = true;
-        ground.renderingGroupId = 0;
-
-        // 3d model
-        BABYLON.SceneLoader.ImportMesh("", "assets/", "labyrinth.babylon", scene, function (newMeshes2) {
-        var labyrinth = new BABYLON.StandardMaterial("assets/", scene);
-        labyrinth.diffuseTexture = new BABYLON.Texture("assets/stene.jpg", scene);
-        labyrinth.diffuseTexture.uScale = 0.5;
-        labyrinth.diffuseTexture.vScale = 0.5;
-
-        for(var i = 0; i < newMeshes2.length; i++) {
-            newMeshes2[i].isVisible = true;            
-            newMeshes2[i].checkCollisions = true;
-            newMeshes2[i].scaling = new BABYLON.Vector3(2, 1, 2);
-            newMeshes2[i].position = new BABYLON.Vector3(0, -10, 0);
-            newMeshes2[i].material = labyrinth;
+    <meta charset="utf-8">
+    <title>Labirint</title>
+ 
+    <style>
+        html, body {
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
         }
+ 
+        #renderCanvas {
+            width: 100%;
+            height: 100%;
+            touch-action: none;
+        }
+    </style>
+ 
+    <script src="./scripts/babylon.js"></script>
+    <script src="./scripts/hand.js"></script>
+    <script src="./scripts/cannon.js"></script>  <!-- optional physics engine -->
+</head>
+ 
+<body>
+<canvas id="renderCanvas"></canvas>
+ 
+<script type="text/javascript">
+    if (BABYLON.Engine.isSupported()) {
+        var canvas = document.getElementById("renderCanvas");
+        var engine = new BABYLON.Engine(canvas, true);
+        var obrnjenost = 0;
+        var premikanjeX = 0;
+        var premikanjeZ = 0;
+        var labyrinth;
+ 
+        var createScene = function () {
+            var scene = new BABYLON.Scene(engine);
+            scene.clearColor = new BABYLON.Color3(0, 1, 0);
+            //var light = new BABYLON.PointLight("Omni", new BABYLON.Vector3(20, 20, 100), scene);
+            /*var light0 = new BABYLON.HemisphericLight("Hemi0", new BABYLON.Vector3(0, 1, 0), scene);
+            light0.diffuse = new BABYLON.Color3(0.00001, 0.00001, 0.00001);
+            light0.specular = new BABYLON.Color3(0.1, 0.1, 0.1);
+            light0.groundColor = new BABYLON.Color3(0.5, 0.5, 0.5);*/
+            var light1 = new BABYLON.DirectionalLight("Dir0", new BABYLON.Vector3(0, -1, 0), scene);
+            light1.diffuse = new BABYLON.Color3(0.8, 0.8, 0.8);
+            light1.specular = new BABYLON.Color3(0, 0, 0);
+            light1.groundColor = new BABYLON.Color3(1, 1, 1);
+            light1.intensity = 1.2;
 
-      });
-      
-      // ozadje
-      scene.clearColor = new BABYLON.Color3(0.5, 0.8, 0.5);
-      var skybox = BABYLON.Mesh.CreateBox("skyBox", 100.0, scene);
-  		var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
-  		skyboxMaterial.backFaceCulling = false;
-  		skybox.material = skyboxMaterial;
-  		skybox.infiniteDistance = true;
-  		skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
-  		skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
-  		skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("assets/skybox", scene);
-  		skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
-  		skyboxMaterial.position = new BABYLON.Vector3(0, 0, 0);
-      skybox.renderingGroupId = 0;
-         
-      /* BABYLON.SceneLoader.ImportMesh("", "assets/", "labyrinth.babylon", scene, function (newMeshes) {
-        // Set the target of the camera to the first imported mesh
-        camera.target = newMeshes[0];*/
-      // });
-
-      scene.gravity = new BABYLON.Vector3(0, -0.9, 0);
-      scene.collisionsEnabled = true;
-      camera.checkCollisions = true;
-      camera.applyGravity = true;
-      camera.ellipsoid = new BABYLON.Vector3(1, 1, 1);
-      skybox.checkCollisions = true;
-
-      return scene;
-
-      }; 
-
-      var scene = createScene();
-
-      engine.runRenderLoop(function () {
-         scene.render();
-      });
-
-      window.addEventListener("resize", function () {
-         engine.resize();
-      });
-
+            var sphere = BABYLON.Mesh.CreateSphere("sphere", 30.0, 2.0, scene);
+            sphere.position =  new BABYLON.Vector3(-34.697440739293484, -8, -40.73790774292142);
+ 
+            var camera = new BABYLON.FollowCamera("FreeCamera", new BABYLON.Vector3(-34.697440739293484, -8, -40.73790774292142), scene);
+            camera.target = sphere;
+            camera.rotationOffset = 180;
+            camera.radius = 4;
+            camera.heightOffset = 2; 
+            camera.cameraAcceleration = 0.05;
+            camera.maxCameraSpeed = 5;
+            camera.parent = light1;
+            
+            //camera.attachControl(canvas, true);
+// 3d model
+            BABYLON.SceneLoader.ImportMesh("", "assets/", "labyrinth.babylon", scene, function (newMeshes2) {
+                labyrinth = new BABYLON.StandardMaterial("assets/", scene);
+                labyrinth.diffuseTexture = new BABYLON.Texture("assets/stene.jpg", scene);
+                labyrinth.diffuseTexture.uScale = 0.5;
+                labyrinth.diffuseTexture.vScale = 0.5;
+ 
+                for(var i = 0; i < newMeshes2.length; i++) {
+                    newMeshes2[i].isVisible = true;
+                    newMeshes2[i].checkCollisions = true;
+                    newMeshes2[i].scaling = new BABYLON.Vector3(2, 1, 2);
+                    newMeshes2[i].position = new BABYLON.Vector3(0, -10, 0);
+                    newMeshes2[i].material = labyrinth;
+                }
+ 
+            });
+ 
+            window.addEventListener("keydown", function(evt) {
+                if (evt.keyCode==65){//levo
+                    if (obrnjenost == 0) {
+                        sphere.rotation.y = 3*Math.PI/2;
+                    }
+                    else if (obrnjenost == 1) {
+                        sphere.rotation.y = 0;
+                    }
+                    else if (obrnjenost == 2) {
+                        sphere.rotation.y = Math.PI/2;
+                    }
+                    else if (obrnjenost == 3) {
+                        sphere.rotation.y = Math.PI;
+                    }
+                    obrnjenost--;
+                    if (obrnjenost < 0) {
+                        obrnjenost = obrnjenost + 4;
+                    }
+                }
+                if (evt.keyCode==68){//desno
+                    if (obrnjenost == 0) {
+                        sphere.rotation.y = Math.PI/2;
+                    }
+                    else if (obrnjenost == 1) {
+                        sphere.rotation.y = Math.PI;
+                    }
+                    else if (obrnjenost == 2) {
+                        sphere.rotation.y = 3*(Math.PI/2);
+                    }
+                    else if (obrnjenost == 3) {
+                        sphere.rotation.y = 0;
+                    }
+                    obrnjenost++;
+                    if (obrnjenost > 3) {
+                        obrnjenost = obrnjenost - 4;
+                    }
+                }
+                if (evt.keyCode==87){//naprej
+                    if (obrnjenost == 0) {
+                        premikanjeZ = 0.1;
+                        premikanjeX = 0;
+                    }
+                    else if (obrnjenost == 1) {
+                        premikanjeX = 0.1;
+                        premikanjeZ = 0;
+                    }
+                    else if (obrnjenost == 2) {
+                        premikanjeZ = -0.1;
+                        premikanjeX = 0;
+                    }
+                    else if (obrnjenost == 3) {
+                        premikanjeX = -0.1;
+                        premikanjeZ = 0;
+                    }
+                    scene.registerBeforeRender(function () {
+                        sphere.computeWorldMatrix(true);
+                        //labyrinth.computeWorldMatrix(true);
+                        if (!sphere.intersectsMesh(labyrinth, true)) {
+                            //sphere.applyImpulse(new BABYLON.Vector3(premikanjeX, 0, premikanjeZ), sphere.position);
+                            var forward = new BABYLON.Vector3(parseFloat(Math.sin(parseFloat(sphere.rotation.y))) / 8, 0, parseFloat(Math.cos(parseFloat(sphere.rotation.y))) / 8);
+                            sphere.moveWithCollisions(forward);
+                        }
+                    });
+                    //sphere.position = sphere.position.add(new BABYLON.Vector3(premikanjeX, 0, premikanjeZ));
+                    //sphere.moveWithCollisions(new BABYLON.Vector3(premikanjeX, 0, premikanjeZ));
+                    //camera.cameraDirection= camera.cameraDirection.add(new BABYLON.Vector3(premikanjeX, 0, premikanjeZ));
+                }
+                if (evt.keyCode==83){//nazaj
+                    if (obrnjenost == 0) {
+                        premikanjeZ = -0.1;
+                        premikanjeX = 0;
+                    }
+                    else if (obrnjenost == 1) {
+                        premikanjeX = -0.1;
+                        premikanjeZ = 0;
+                    }
+                    else if (obrnjenost == 2) {
+                        premikanjeZ = 0.1;
+                        premikanjeX = 0;
+                    }
+                    else if (obrnjenost == 3) {
+                        premikanjeX = 0.1;
+                        premikanjeZ = 0;
+                    }
+                    scene.registerBeforeRender(function () {
+                        sphere.computeWorldMatrix(true);
+                        //labyrinth.computeWorldMatrix(true);
+                        if (!sphere.intersectsMesh(labyrinth, true)) {
+                            //sphere.applyImpulse(new BABYLON.Vector3(premikanjeX, 0, premikanjeZ), sphere.position);
+                            sphere.moveWithCollisions(new BABYLON.Vector3(premikanjeX, 0, premikanjeZ));
+                        }
+                    });
+                    //sphere.position = sphere.position.add(new BABYLON.Vector3(premikanjeX, 0, premikanjeZ));
+ 
+                    //camera.cameraDirection= camera.cameraDirection.add(new BABYLON.Vector3(premikanjeX, 0, premikanjeZ));
+                }
+            }, false);
+ 
+            // nadomestna tla
+            var ground = BABYLON.Mesh.CreatePlane("ground", 500.0, scene);
+            ground.material = new BABYLON.StandardMaterial("groundMat", scene);
+            ground.material.diffuseColor = new BABYLON.Color3(0, 0, 0);
+            ground.material.backFaceCulling = true;
+            ground.position = new BABYLON.Vector3(0, -9.99, 0);
+            ground.rotation = new BABYLON.Vector3(Math.PI / 2, 0, 0);
+            ground.checkCollisions = true;
+            ground.renderingGroupId = 0;
+ 
+ 
+            // ozadje
+            scene.clearColor = new BABYLON.Color3(0.5, 0.8, 0.5);
+            var skybox = BABYLON.Mesh.CreateBox("skyBox", 100.0, scene);
+            var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
+            skyboxMaterial.backFaceCulling = false;
+            skybox.material = skyboxMaterial;
+            skybox.infiniteDistance = true;
+            skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
+            skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
+            skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("assets/skybox", scene);
+            skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
+            skyboxMaterial.position = new BABYLON.Vector3(0, 0, 0);
+            skybox.renderingGroupId = 0;
+ 
+            /* BABYLON.SceneLoader.ImportMesh("", "assets/", "labyrinth.babylon", scene, function (newMeshes) {
+             // Set the target of the camera to the first imported mesh
+             camera.target = newMeshes[0];*/
+            // });
+ 
+            scene.gravity = new BABYLON.Vector3(0, -0.9, 0);
+            scene.collisionsEnabled = true;
+            camera.checkCollisions = true;
+            camera.applyGravity = true;
+            sphere.applyGravity = true;
+            sphere.checkCollisions= true;
+            sphere.ellipsoid = new BABYLON.Vector3(1, 1, 1);
+            camera.ellipsoid = new BABYLON.Vector3(1, 1, 1);
+            skybox.checkCollisions = true;
+ 
+            return scene;
+ 
+        };
+ 
+        var scene = createScene();
+ 
+        engine.runRenderLoop(function () {
+            scene.render();
+        });
+ 
+        window.addEventListener("resize", function () {
+            engine.resize();
+        });
+ 
     }
-
-   </script>
-
+ 
+</script>
+ 
 </body>
 </html>
-
-
-
