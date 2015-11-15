@@ -395,35 +395,65 @@
             item4.computeWorldMatrix(true);
             scene.registerBeforeRender(function () {
  
-                if (sphere.intersectsMesh(item1, false)) {
+                if (sphere.intersectsMesh(item1, true)) {
                     stevecObjektov++;
                     alert("You found the "+stevecObjektov+"/4 piece of your past! :O");
                     item1.position = new BABYLON.Vector3(-45.483073024119534, -16, -30);
-                    material2.diffuseTexture = new BABYLON.Texture("assets/1.png", scene);
+                    if(stevecObjektov==1){
+                        material2.diffuseTexture = new BABYLON.Texture("assets/1.png", scene);
+                    }else if(stevecObjektov==2){
+                        material2.diffuseTexture = new BABYLON.Texture("assets/2.png", scene);
+                    }else if(stevecObjektov==3){
+                        material2.diffuseTexture = new BABYLON.Texture("assets/3.png", scene);
+                    }else if(stevecObjektov==4){
+                        material2.diffuseTexture = new BABYLON.Texture("assets/4.png", scene);
+                    }
                 }
  
-                if (sphere.intersectsMesh(item2, false)) {
+                if (sphere.intersectsMesh(item2, true)) {
                     stevecObjektov++;
                     alert("You found the "+stevecObjektov+"/4 piece of your past! :O");
                     item2.position = new BABYLON.Vector3(41.95940911260758, -16, -27.82346783729356);
-                    material2.diffuseTexture = new BABYLON.Texture("assets/2.png", scene);
+                    if(stevecObjektov==1){
+                        material2.diffuseTexture = new BABYLON.Texture("assets/1.png", scene);
+                    }else if(stevecObjektov==2){
+                        material2.diffuseTexture = new BABYLON.Texture("assets/2.png", scene);
+                    }else if(stevecObjektov==3){
+                        material2.diffuseTexture = new BABYLON.Texture("assets/3.png", scene);
+                    }else if(stevecObjektov==4){
+                        material2.diffuseTexture = new BABYLON.Texture("assets/4.png", scene);
+                    }
                 }
  
-                if (sphere.intersectsMesh(item3, false)) {
+                if (sphere.intersectsMesh(item3, true)) {
                     stevecObjektov++;
                     alert("You found the "+stevecObjektov+"/4 piece of your past! :O");
                     item3.position = new BABYLON.Vector3(42.836697516092684, -16, -6.319501548962687);
-                    material2.diffuseTexture = new BABYLON.Texture("assets/3.png", scene);
+                    if(stevecObjektov==1){
+                        material2.diffuseTexture = new BABYLON.Texture("assets/1.png", scene);
+                    }else if(stevecObjektov==2){
+                        material2.diffuseTexture = new BABYLON.Texture("assets/2.png", scene);
+                    }else if(stevecObjektov==3){
+                        material2.diffuseTexture = new BABYLON.Texture("assets/3.png", scene);
+                    }else if(stevecObjektov==4){
+                        material2.diffuseTexture = new BABYLON.Texture("assets/4.png", scene);
+                    }
                 }
  
-                if (sphere.intersectsMesh(item4, false)) {
+                if (sphere.intersectsMesh(item4, true)) {
                     stevecObjektov++;
                     alert("You found the "+stevecObjektov+"/4 piece of your past! :O");
                     item4.position = new BABYLON.Vector3(-44.09810739135112, -16, 20.632948101757854);
-                    material2.diffuseTexture = new BABYLON.Texture("assets/4.png", scene);
+                    if(stevecObjektov==1){
+                        material2.diffuseTexture = new BABYLON.Texture("assets/1.png", scene);
+                    }else if(stevecObjektov==2){
+                        material2.diffuseTexture = new BABYLON.Texture("assets/2.png", scene);
+                    }else if(stevecObjektov==3){
+                        material2.diffuseTexture = new BABYLON.Texture("assets/3.png", scene);
+                    }else if(stevecObjektov==4){
+                        material2.diffuseTexture = new BABYLON.Texture("assets/4.png", scene);
+                    }
                 }
- 
- 
             });
 
             var tockaVklopa1 = BABYLON.Mesh.CreateBox("tv1", 5, scene);
@@ -453,27 +483,27 @@
             tockaIzklopa4.computeWorldMatrix(true);
 
             scene.registerBeforeRender(function(){
-                if(sphere.intersectsMesh(tockaVklopa1, false)){
+                if(sphere.intersectsMesh(tockaVklopa1, true)){
                     posastStrela=true;
                     //console.log(posastStrela);
                 }
-                if(sphere.intersectsMesh(tockaVklopa2, false)){
+                if(sphere.intersectsMesh(tockaVklopa2, true)){
                     posastStrela=true;
                     //console.log(posastStrela);
                 }
-                if(sphere.intersectsMesh(tockaIzklopa1, false)){
+                if(sphere.intersectsMesh(tockaIzklopa1, true)){
                     posastStrela=false;
                     //console.log(posastStrela);
                 }
-                if(sphere.intersectsMesh(tockaIzklopa2, false)){
+                if(sphere.intersectsMesh(tockaIzklopa2, true)){
                     posastStrela=false;
                     //console.log(posastStrela);
                 }
-                if(sphere.intersectsMesh(tockaIzklopa3, false)){
+                if(sphere.intersectsMesh(tockaIzklopa3, true)){
                     posastStrela=false;
                     //console.log(posastStrela);
                 }
-                if(sphere.intersectsMesh(tockaIzklopa4, false)){
+                if(sphere.intersectsMesh(tockaIzklopa4, true)){
                     posastStrela=false;
                     //console.log(posastStrela);
                 }
