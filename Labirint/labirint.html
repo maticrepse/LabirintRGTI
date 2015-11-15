@@ -40,6 +40,8 @@
         var premikanjeZ = 0;
         var labyrinth;
         var life1, life11, life2, life22, life3, life33, life4, life44, life5, life55;
+        var stZadetkov=3;
+        var ubita=false;
  
         var createScene = function () {
             var scene = new BABYLON.Scene(engine);
@@ -362,22 +364,96 @@
             });
             var metki=0;
             setInterval(function(){
-                if(posastStrela){
+                if(posastStrela&&!ubita){
                         var zacX = posast.position.x;
                         var zacY = posast.position.y;
                         var zacZ = posast.position.z;
                         var ammo2 = BABYLON.Mesh.CreateSphere("sphere"+metki, 10, 0.5, scene);
-                        ammo2.position = new BABYLON.Vector3(-55, -55, -55);
-                        //var ammo2 = ammo.clone("");
                         ammo2.position = new BABYLON.Vector3(zacX, zacY, zacZ);
-                        ammo2.checkCollisions = true;
-                        //scene.registerBeforeRender(function() {
+                        //ammo2.checkCollisions = true;
                         ammo2.computeWorldMatrix(true);
                         premikajMetek(scene, ammo2, metki, zPlus, zMinus, xPlus, xMinus, sphere);
                         metki++;
                 }
             },1000);
- 
+            var metki2=0;
+            var zPlus1 = false;
+            var zMinus1 = false;
+            var xPlus1 = false;
+            var xMinus1 = false;
+            window.addEventListener("keydown", function(evt) {
+                if(evt.keyCode == 32) {
+                    // space bar
+                    // pridobis koordinate od pozicije igralca
+                    var zacX = sphere.position.x;
+                    var zacY = sphere.position.y;
+                    var zacZ = sphere.position.z;
+                    var ammo1 = BABYLON.Mesh.CreateSphere("metki"+metki2, 10, 0.5, scene);
+
+                    if (obrnjenost == 0) {
+                        ammo1.position = new BABYLON.Vector3(zacX, zacY, zacZ+2);
+                        zPlus1=true;
+                        xPlus1=false;
+                        xMinus1=false;
+                        zMinus1=false;
+                    }
+                    else if (obrnjenost == 1) {
+                        ammo1.position = new BABYLON.Vector3(zacX+2, zacY, zacZ+2);
+                        zPlus1=true;
+                        xPlus1=true;
+                        xMinus1=false;
+                        zMinus1=false;
+                    }
+                    else if (obrnjenost == 2) {
+                        ammo1.position = new BABYLON.Vector3(zacX+2, zacY, zacZ);
+                        zPlus1=false;
+                        xPlus1=true;
+                        xMinus1=false;
+                        zMinus1=false;
+                    }
+                    else if (obrnjenost == 3) {
+                        ammo1.position = new BABYLON.Vector3(zacX+2, zacY, zacZ-2);
+                        zPlus1=false;
+                        xPlus1=true;
+                        xMinus1=false;
+                        zMinus1=true;
+                    }
+                    else if (obrnjenost == 4) {
+                        ammo1.position = new BABYLON.Vector3(zacX, zacY, zacZ-2);
+                        zPlus1=false;
+                        xPlus1=false;
+                        xMinus1=false;
+                        zMinus1=true;
+                    }
+                    else if (obrnjenost == 5) {
+                        ammo1.position = new BABYLON.Vector3(zacX-2, zacY, zacZ-2);
+                        zPlus1=false;
+                        xPlus1=false;
+                        xMinus1=true;
+                        zMinus1=true;
+                    }
+                    else if (obrnjenost == 6) {
+                        ammo1.position = new BABYLON.Vector3(zacX-2, zacY, zacZ);
+                        zPlus1=false;
+                        xPlus1=false;
+                        xMinus1=true;
+                        zMinus1=false;
+                    }
+                    else if (obrnjenost == 7) {
+                        ammo1.position = new BABYLON.Vector3(zacX-2, zacY, zacZ+2);
+                        zPlus1=true;
+                        xPlus1=false;
+                        xMinus1=true;
+                        zMinus1=false;
+                    }
+                    //ammo1.checkCollisions = true;
+                    ammo1.computeWorldMatrix(true);
+                    premikajMetekIgralca(scene,ammo1,metki2,posast,sphere,xPlus1,xMinus1,zPlus1,zMinus1);
+                    metki2++;
+                }
+
+            }, false);
+
             scene.gravity = new BABYLON.Vector3(0, -0.9, 0);
             scene.collisionsEnabled = true;
             camera.checkCollisions = true;
@@ -541,6 +617,53 @@
             engine.resize();
         });
  
+    }
+
+    function premikajMetekIgralca(scene, metek, index, posast,sphere,xPlus1,xMinus1,zPlus1,zMinus1){
+        var zadet=false;
+        scene.registerBeforeRender(function(){
+            if(scene.getMeshByName("metki"+index)){
+                if (zPlus1&&xPlus1) {
+                    metek.position.z+=0.1;
+                    metek.position.x+=0.1;
+                }
+                else if (xPlus1&&zMinus1) {
+                    metek.position.z-=0.1;
+                    metek.position.x+=0.1;
+                }
+                else if (zMinus1&&xMinus1) {
+                    metek.position.z-=0.1;
+                    metek.position.x-=0.1;
+                }
+                else if (zPlus1&&xMinus1) {
+                    metek.position.z+=0.1;
+                    metek.position.x-=0.1;
+                }
+                else if (zPlus1) {
+                    metek.position.z+=0.1;
+                }
+                else if (xPlus1) {
+                    metek.position.x+=0.1;
+                }
+                else if (zMinus1) {
+                    metek.position.z-=0.1;
+                }
+                else if (xMinus1) {
+                    metek.position.x-=0.1;
+                }
+                if(posast.intersectsMesh(metek, true)){
+                    if(!zadet){
+                        stZadetkov--;
+                        if(stZadetkov==0){
+                            alert("Ubili ste posast! :D");
+                            posast.position.y = -16;
+                            ubita=true;
+                        }
+                        zadet=true;
+                    }
+                }
+            }
+        });
     }
 
     function premikajMetek(scene, metek, index, zPlus, zMinus, xPlus, xMinus, posast){
