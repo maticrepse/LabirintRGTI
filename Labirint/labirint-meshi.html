@@ -93,17 +93,21 @@
  
                 for(var i = 0; i < newMeshes0.length; i++) {
                     
-                    newMeshes0[i].checkCollisions = true;
+                    //newMeshes0[i].checkCollisions = true;
                     newMeshes0[i].scaling = new BABYLON.Vector3(2, 2, 2);
                     newMeshes0[i].position = new BABYLON.Vector3(-34.697440739293484, -8, -40.73790774292142);
                     newMeshes0[i].rotation.y = Math.PI;
                     //newMeshes0[i].parent = sphere;
                     newMeshes0[i].isVisible = true;
                     newMeshes0[i].material = player;
-                }   
+                }
+                scene.registerBeforeRender(function(){
+                    newMeshes0[0].position = sphere.position;
+                });
 
-            });   
-            
+
+            });
+
             //player.material = player1;
             //player.parent = sphere;
              
@@ -261,10 +265,10 @@
                 }
                 if (evt.keyCode==87){//naprej
                     scene.registerBeforeRender(function () {
-                        player.computeWorldMatrix(true);
-                        if (!player.intersectsMesh(labyrinth, true)) {
+                        sphere.computeWorldMatrix(true);
+                        if (!sphere.intersectsMesh(labyrinth, true)) {
                             var forward = new BABYLON.Vector3(parseFloat(Math.sin(parseFloat(sphere.rotation.y))) / 10, -0.5, parseFloat(Math.cos(parseFloat(sphere.rotation.y))) / 10);
-                            player.moveWithCollisions(forward);
+                            sphere.moveWithCollisions(forward);
                         }
                     });
                 }
