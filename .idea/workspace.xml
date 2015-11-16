@@ -1,29 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ef8846a8-efd6-477d-9980-8c52e79a65f9" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Labirint/assets/04bd0ac9.dds" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Labirint/assets/15bd6bc7.dds" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Labirint/assets/488a78da.dds" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Labirint/assets/5feb7db1.dds" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Labirint/assets/62d1e816.dds" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Labirint/assets/9c161e48.dds" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Labirint/assets/Thumbs.db" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Labirint/assets/a1c1b0f5.dds" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Labirint/assets/boss.babylon" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Labirint/assets/c7d648bf.dds" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Labirint/assets/d6428c57.dds" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Labirint/assets/db8f38ac.dds" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Labirint/assets/monsterlayer1.bmp" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Labirint/assets/trap.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Labirint/assets/TreeMonster.babylon" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/assets/TreeMonster.babylon" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Labirint/assets/monster1.babylon" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Labirint/assets/player.babylon" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Labirint/assets/resetke.png" afterPath="$PROJECT_DIR$/Labirint/assets/resetke.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Labirint/labirint.html" afterPath="$PROJECT_DIR$/Labirint/labirint.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-    </list>
+    <list default="true" id="ef8846a8-efd6-477d-9980-8c52e79a65f9" name="Default" comment="" />
     <ignored path="LabirintRGTI.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
