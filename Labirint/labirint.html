@@ -33,8 +33,9 @@
     var stevecObjektov = 0;
     var posastStrela=false;
     var sefeStrela=false;
+    var tockaVklopa2;
+    var kljuc;
     var start;
-    var scene;
     var napis3;
     if (BABYLON.Engine.isSupported()) {
         var canvas = document.getElementById("renderCanvas");
@@ -48,11 +49,11 @@
         var stZadetkovSefe=5;
         var ubita=false;
         var sefeUbit=false;
-        start =  new BABYLON.Vector3(-34.697440739293484, -8, -40.73790774292142);
+        start =  new BABYLON.Vector3(-34.697440739293484, -8, -31.73790774292142);
 
 
         var createScene = function () {
-            scene = new BABYLON.Scene(engine);
+            var scene = new BABYLON.Scene(engine);
             scene.clearColor = new BABYLON.Color3(0, 1, 0);
             //var light = new BABYLON.PointLight("Omni", new BABYLON.Vector3(20, 20, 100), scene);
             var light0 = new BABYLON.HemisphericLight("Hemi0", new BABYLON.Vector3(0, 1, 0), scene);
@@ -278,7 +279,15 @@
             skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
             skyboxMaterial.position = new BABYLON.Vector3(0, 0, 0);
             skybox.renderingGroupId = 0;
- 
+
+            var startClosed = BABYLON.Mesh.CreateBox("startClosed", 10, scene);
+            startClosed.position = new BABYLON.Vector3(-34.697440739293484, -10, -39.73790774292142);
+            startClosed.checkCollisions=true;
+            startClosed.isVisible=false;
+
+            kljuc = BABYLON.Mesh.CreateBox("kljuc", 0.5, scene);
+            kljuc.position = new BABYLON.Vector3(37, -8, 11.5);
+            kljuc.isVisible=false;
             var item1 = BABYLON.Mesh.CreateBox("i1", 0.5, scene);
             item1.position = new BABYLON.Vector3(-45.483073024119534, -9, -30);
             var item2 = BABYLON.Mesh.CreateBox("i2", 0.5, scene);
@@ -544,6 +553,7 @@
             item1.computeWorldMatrix(true);
             item2.computeWorldMatrix(true);
             item3.computeWorldMatrix(true);
+            kljuc.computeWorldMatrix(true);
             item4.computeWorldMatrix(true);
             scene.registerBeforeRender(function () {
  
@@ -606,6 +616,11 @@
                         material2.diffuseTexture = new BABYLON.Texture("assets/4.png", scene);
                     }
                 }
+                if (sphere.intersectsMesh(kljuc, true)) {
+                    kljuc.isVisible=false;
+                    tockaVklopa2.isVisible=false;
+                    tockaVklopa2.checkCollisions=false;
+                }
             });
             //vklop
             /*x: -42.814303215674606
@@ -640,8 +655,19 @@
             tockaVklopa1.position = new BABYLON.Vector3(27.07581594828071, -8, -12.182966390649216);
             var tockaIzklopa1 = BABYLON.Mesh.CreateBox("ti1", 5, scene);
             tockaIzklopa1.position = new BABYLON.Vector3(21.275815948280627, -8, -12.182966390649216);
-            var tockaVklopa2 = BABYLON.Mesh.CreateBox("tv2", 6, scene);
-            tockaVklopa2.position = new BABYLON.Vector3(30.6852949892746,-8, 23.087330345619428);
+            tockaVklopa2= BABYLON.Mesh.CreateBox("tv2", 10, scene);
+            tockaVklopa2.position = new BABYLON.Vector3(30.6852949892746,-8, 28.087330345619428);
+            //var napis = BABYLON.Mesh.CreatePlane("memorybar", 0.25, scene, false);
+            var resetke = new BABYLON.StandardMaterial("resetke", scene);
+            resetke.diffuseTexture = new BABYLON.Texture("assets/resetke.png", scene);
+            tockaVklopa2.material = resetke;
+            tockaVklopa2.scaling.y = 1;
+            tockaVklopa2.scaling.x = 1;
+            //napis.parent = camera;
+            //napis.position = new BABYLON.Vector3(1.40, 1.15, 3);
+            //napis.rotation = new BABYLON.Vector3(0, 0, 0);
+            napis.renderingGroupId = 1;
+
             var tockaIzklopa2 = BABYLON.Mesh.CreateBox("ti2", 5, scene);
             tockaIzklopa2.position = new BABYLON.Vector3(25.75894939254551, -8, 27.71661966750084);
             var tockaIzklopa3 = BABYLON.Mesh.CreateBox("ti3", 5, scene);
@@ -649,7 +675,8 @@
             var tockaIzklopa4 = BABYLON.Mesh.CreateBox("ti4", 5, scene);
             tockaIzklopa4.position = new BABYLON.Vector3(34.24000363347499, -8, -14.428874815235849);
             tockaVklopa1.isVisible=false;
-            tockaVklopa2.isVisible=false;
+            //tockaVklopa2.isVisible=false;
+            tockaVklopa2.checkCollisions=true;
             tockaIzklopa1.isVisible=false;
             tockaIzklopa2.isVisible=false;
             tockaIzklopa3.isVisible=false;
@@ -694,7 +721,14 @@
             trapCoorY = -9;
             trapCoorZ = 29.29639942001256;
             //var trapItem = BABYLON.Mesh.CreateBox("t1", 1, scene);
-            var trapItem = BABYLON.Mesh.CreateBox("t1", 1, scene);
+            var trapItem = BABYLON.Mesh.CreateBox("trap1", 3, scene);
+            trapItem.rotate.z = Math.PI/2;
+            var trapTex = new BABYLON.StandardMaterial("trapTex", scene);
+            trapTex.diffuseTexture = new BABYLON.Texture("assets/trap.png", scene);
+            trapItem.material = trapTex;
+            trapItem.scaling.y = 0.6;
+            trapItem.scaling.x = 0.6;
+            
             trapItem.position = new BABYLON.Vector3(trapCoorX, trapCoorY, trapCoorZ);
             scene.registerBeforeRender(function () {
                 sphere.computeWorldMatrix(true);
@@ -762,6 +796,7 @@
                         stZadetkov--;
                         if(stZadetkov==0){
                             alert("Ubili ste posast! :D");
+                            kljuc.isVisible=true;
                             posast.position.y = -16;
                             ubita=true;
                         }
