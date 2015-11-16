@@ -644,6 +644,17 @@
             tockaIzklopa1.position = new BABYLON.Vector3(21.275815948280627, -8, -12.182966390649216);
             tockaVklopa2= BABYLON.Mesh.CreateBox("tv2", 10, scene);
             tockaVklopa2.position = new BABYLON.Vector3(30.6852949892746,-8, 28.087330345619428);
+            //var napis = BABYLON.Mesh.CreatePlane("memorybar", 0.25, scene, false);
+            var resetke = new BABYLON.StandardMaterial("resetke", scene);
+            resetke.diffuseTexture = new BABYLON.Texture("assets/resetke.png", scene);
+            tockaVklopa2.material = resetke;
+            tockaVklopa2.scaling.y = 1;
+            tockaVklopa2.scaling.x = 1;
+            //napis.parent = camera;
+            //napis.position = new BABYLON.Vector3(1.40, 1.15, 3);
+            //napis.rotation = new BABYLON.Vector3(0, 0, 0);
+            napis.renderingGroupId = 1;
+
             var tockaIzklopa2 = BABYLON.Mesh.CreateBox("ti2", 5, scene);
             tockaIzklopa2.position = new BABYLON.Vector3(25.75894939254551, -8, 27.71661966750084);
             var tockaIzklopa3 = BABYLON.Mesh.CreateBox("ti3", 5, scene);
@@ -651,7 +662,7 @@
             var tockaIzklopa4 = BABYLON.Mesh.CreateBox("ti4", 5, scene);
             tockaIzklopa4.position = new BABYLON.Vector3(34.24000363347499, -8, -14.428874815235849);
             tockaVklopa1.isVisible=false;
-            tockaVklopa2.isVisible=false;
+            //tockaVklopa2.isVisible=false;
             tockaVklopa2.checkCollisions=true;
             tockaIzklopa1.isVisible=false;
             tockaIzklopa2.isVisible=false;
@@ -697,7 +708,14 @@
             trapCoorY = -9;
             trapCoorZ = 29.29639942001256;
             //var trapItem = BABYLON.Mesh.CreateBox("t1", 1, scene);
-            var trapItem = BABYLON.Mesh.CreateBox("t1", 1, scene);
+            var trapItem = BABYLON.Mesh.CreateBox("trap1", 3, scene);
+            trapItem.rotate.z = Math.PI/2;
+            var trapTex = new BABYLON.StandardMaterial("trapTex", scene);
+            trapTex.diffuseTexture = new BABYLON.Texture("assets/trap.png", scene);
+            trapItem.material = trapTex;
+            trapTex.scaling.y = 0.6;
+            trapTex.scaling.x = 0.6;
+            
             trapItem.position = new BABYLON.Vector3(trapCoorX, trapCoorY, trapCoorZ);
             scene.registerBeforeRender(function () {
                 sphere.computeWorldMatrix(true);
