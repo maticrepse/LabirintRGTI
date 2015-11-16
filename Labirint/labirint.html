@@ -158,6 +158,17 @@
             napis2.rotation = new BABYLON.Vector3(0, 0, 0);
             napis2.renderingGroupId = 1;
 
+            var napis3 = BABYLON.Mesh.CreatePlane("bar", 0.25, scene, false);
+            var material3 = new BABYLON.StandardMaterial("bar", scene);
+            //material2.diffuseTexture = new BABYLON.Texture("assets/0.png", scene);
+            napis3.material = material3;
+            napis3.scaling.y = 0.55;
+            napis3.scaling.x = 4.5;
+            napis3.parent = camera;
+            napis3.position = new BABYLON.Vector3(0, 1.15, 3);
+            napis3.rotation = new BABYLON.Vector3(0, 0, 0);
+            napis3.renderingGroupId = 1;
+
             window.addEventListener("keydown", function(evt) {
                 if (evt.keyCode==65){//levo
                     if (obrnjenost == 0) {
