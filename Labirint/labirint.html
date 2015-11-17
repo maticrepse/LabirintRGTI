@@ -40,12 +40,20 @@
     var izhod;
     var napis3;
     var pavza=false;
-    var povecajza1=-10;
     var player;
     var posast1;
     var posast;
     var sefe;
     var treeM;
+    var lab;
+    var st = 0;
+    var meja1;
+    var meja2;
+    var meja3;
+    var meja4;
+    var napis, napis2, napis3, napis4, napis5, napis6, napis7;
+    var item1, item2, item3, item4, trapItem, itemFound, missingItems;
+
     if (BABYLON.Engine.isSupported()) {
         var canvas = document.getElementById("renderCanvas");
         var engine = new BABYLON.Engine(canvas, true);
@@ -54,7 +62,7 @@
         var premikanjeZ = 0;
         var labyrinth;
         var life1, life11, life2, life22, life3, life33, life4, life44, life5, life55;
-        var stZadetkov = 3;
+        var stZadetkov = 5;
         var stZadetkovSefe = 10;
         var ubita = false;
         var sefeUbit = false;
@@ -72,7 +80,7 @@
             light1.specular = new BABYLON.Color3(0, 0, 0);
             light1.groundColor = new BABYLON.Color3(1, 1, 1);
             light1.intensity = 1.8;
-            var sphere = BABYLON.Mesh.CreateSphere("sphere", 30.0, 2.0, scene);
+            var sphere = BABYLON.Mesh.CreateSphere("sphere", 30.0, 0.8, scene);
             sphere.position = start;
             sphere.wireFrame = true;
             sphere.rotation.y = Math.PI;
@@ -101,19 +109,19 @@
                     newMeshes2[i].position = new BABYLON.Vector3(0, -10, 0);
                     newMeshes2[i].material = labyrinth;
                 }
-                scene.registerBeforeRender(function () {
-                    //newMeshes2[0].position = new BABYLON.Vector3(0, povecajza1, 0);
-                    /*if(newMeshes2[0].intersectsMesh(sphere, true)){
-                        newMeshes2[0].position = new BABYLON.Vector3(0, -10, 0);
-                    }*/
-                });
+                lab = newMeshes2[0];
+                lab.computeWorldMatrix(true);
+
             });
+            /*scene.registerBeforeRender(function(){
+
+            });*/
             sphere.isVisible=false;
             BABYLON.SceneLoader.ImportMesh("", "assets/", "player.babylon", scene, function (newMeshes0) {
                 player = new BABYLON.StandardMaterial("assets/", scene);
-                //player.diffuseTexture = new BABYLON.Texture("assets/monsterlayer1.bmp", scene);
-                //player.diffuseTexture.uScale = 1;
-                //player.diffuseTexture.vScale = 1;
+                player.diffuseTexture = new BABYLON.Texture("assets/player5.png", scene);
+                player.diffuseTexture.uScale = 1;
+                player.diffuseTexture.vScale = 1;
 
                 for(var i = 0; i < newMeshes0.length; i++) {
 
@@ -217,7 +225,13 @@
             life5.position = new BABYLON.Vector3(1.79, 1.15, 3);
             life5.rotation = new BABYLON.Vector3(0, 0, 0);
             life5.renderingGroupId = 1;
-            var napis = BABYLON.Mesh.CreatePlane("memorybar", 0.25, scene, false);
+            life1.isVisible=false;
+            life2.isVisible=false;
+            life3.isVisible=false;
+            life4.isVisible=false;
+            life5.isVisible=false;
+
+            napis = BABYLON.Mesh.CreatePlane("memorybar", 0.25, scene, false);
             var material1 = new BABYLON.StandardMaterial("membar", scene);
             material1.diffuseTexture = new BABYLON.Texture("assets/Memory.png", scene);
             napis.material = material1;
@@ -226,8 +240,9 @@
             napis.parent = camera;
             napis.position = new BABYLON.Vector3(1.40, 1.15, 3);
             napis.rotation = new BABYLON.Vector3(0, 0, 0);
+            napis.isVisible = false;
             napis.renderingGroupId = 1;
-            var napis2 = BABYLON.Mesh.CreatePlane("memorybar", 0.25, scene, false);
+            napis2 = BABYLON.Mesh.CreatePlane("memorybar", 0.25, scene, false);
             var material2 = new BABYLON.StandardMaterial("membar", scene);
             material2.diffuseTexture = new BABYLON.Texture("assets/0.png", scene);
             napis2.material = material2;
@@ -236,6 +251,7 @@
             napis2.parent = camera;
             napis2.position = new BABYLON.Vector3(-2, 1.15, 3);
             napis2.rotation = new BABYLON.Vector3(0, 0, 0);
+            napis2.isVisible = false;
             napis2.renderingGroupId = 1;
             napis3 = BABYLON.Mesh.CreatePlane("bar", 1.2, scene, false);
             var material3 = new BABYLON.StandardMaterial("bar", scene);
@@ -248,11 +264,82 @@
             napis3.rotation = new BABYLON.Vector3(0, 0, 0);
             napis3.isVisible = false;
             napis3.renderingGroupId = 1;
+            napis4 = BABYLON.Mesh.CreatePlane("bar", 0.25, scene, false);
+            var material4 = new BABYLON.StandardMaterial("bar", scene);
+            material4.diffuseTexture = new BABYLON.Texture("assets/pause.png", scene);
+            napis4.material = material4;
+            napis4.scaling.x = 4.5;
+            napis4.scaling.y = 0.55;
+            napis4.parent = camera;
+            napis4.position = new BABYLON.Vector3(1.98, -1.15, 3);
+            napis4.rotation = new BABYLON.Vector3(0, 0, 0);
+            napis4.isVisible = false;
+            napis4.renderingGroupId = 1;
+            napis5 = BABYLON.Mesh.CreatePlane("bar", 1.2, scene, false);
+            var material5 = new BABYLON.StandardMaterial("bar", scene);
+            material5.diffuseTexture = new BABYLON.Texture("assets/pause2.png", scene);
+            napis5.material = material5;
+            napis5.scaling.x = 2.4;
+            napis5.scaling.y = 1;
+            napis5.parent = camera;
+            napis5.position = new BABYLON.Vector3(0, 0.05, 3);
+            napis5.rotation = new BABYLON.Vector3(0, 0, 0);
+            napis5.isVisible = false;
+            napis5.renderingGroupId = 1;
+            napis6 = BABYLON.Mesh.CreatePlane("bar", 2.6, scene, false);
+            var material6 = new BABYLON.StandardMaterial("bar", scene);
+            material6.diffuseTexture = new BABYLON.Texture("assets/start.png", scene);
+            napis6.material = material6;
+            napis6.scaling.x = 2.2;
+            napis6.scaling.y = 1;
+            napis6.parent = camera;
+            napis6.position = new BABYLON.Vector3(0, 0, 3);
+            napis6.rotation = new BABYLON.Vector3(0, 0, 0);
+            napis6.isVisible = true;
+            napis6.renderingGroupId = 1;
+            napis7 = BABYLON.Mesh.CreatePlane("bar", 2.6, scene, false);
+            var material7 = new BABYLON.StandardMaterial("bar", scene);
+            material7.diffuseTexture = new BABYLON.Texture("assets/win.png", scene);
+            napis7.material = material7;
+            napis7.scaling.x = 2.2;
+            napis7.scaling.y = 1;
+            napis7.parent = camera;
+            napis7.position = new BABYLON.Vector3(0, 0, 3);
+            napis7.rotation = new BABYLON.Vector3(0, 0, 0);
+            napis7.isVisible = false;
+            napis7.renderingGroupId = 1;
+            itemFound = BABYLON.Mesh.CreatePlane("itemFound", 1, scene, false);
+            var itemFoundT = new BABYLON.StandardMaterial("itemFoundT", scene);
+            itemFoundT.diffuseTexture = new BABYLON.Texture("assets/itemFound.png", scene);
+            itemFound.material = itemFoundT;
+            itemFound.scaling.x = 3.1;
+            itemFound.scaling.y = 1;
+            itemFound.parent = camera;
+            itemFound.position = new BABYLON.Vector3(0, 0.05, 3);
+            itemFound.rotation = new BABYLON.Vector3(0, 0, 0);
+            itemFound.isVisible = false;
+            itemFound.renderingGroupId = 1;
+            missingItems = BABYLON.Mesh.CreatePlane("missingItems", 1, scene, false);
+            var missingItemsT = new BABYLON.StandardMaterial("missingItemsT", scene);
+            missingItemsT.diffuseTexture = new BABYLON.Texture("assets/missingItems.png", scene);
+            missingItems.material = missingItemsT;
+            missingItems.scaling.x = 3.1;
+            missingItems.scaling.y = 1;
+            missingItems.parent = camera;
+            missingItems.position = new BABYLON.Vector3(0, 0.05, 3);
+            missingItems.rotation = new BABYLON.Vector3(0, 0, 0);
+            missingItems.isVisible = false;
+            missingItems.renderingGroupId = 1;
+
             window.addEventListener("keydown", function (evt) {
                 if (evt.keyCode == 27 && pavza) {
                     pavza = false;
+                    napis5.isVisible = false;
+                    itemFound.isVisible = false;
+                    missingItems.isVisible = false;
                 } else if (evt.keyCode == 27 && !pavza) {
                     pavza = true;
+                    napis5.isVisible = true;
                 }
             }, false);
             window.addEventListener("keydown", function (evt) {
@@ -319,30 +406,58 @@
                     }
                     if (evt.keyCode == 83) {//naprej
                         scene.registerBeforeRender(function () {
-                            sphere.computeWorldMatrix(true);
-                            if (!sphere.intersectsMesh(labyrinth, true)) {
-                                var forward = new BABYLON.Vector3(parseFloat(Math.sin(parseFloat(sphere.rotation.y))) / 10, -0.5, parseFloat(Math.cos(parseFloat(sphere.rotation.y))) / 10);
-                                sphere.moveWithCollisions(forward);
+                            if(!pavza) {
+                                sphere.computeWorldMatrix(true);
+                                if (!sphere.intersectsMesh(labyrinth, true)) {
+                                    var forward = new BABYLON.Vector3(parseFloat(Math.sin(parseFloat(sphere.rotation.y))) / 10, -0.5, parseFloat(Math.cos(parseFloat(sphere.rotation.y))) / 10);
+                                    sphere.moveWithCollisions(forward);
+                                }
                             }
                         });
                     }
                     if (evt.keyCode == 87) {//nazaj
                         scene.registerBeforeRender(function () {
-                            sphere.computeWorldMatrix(true);
-                            if (!sphere.intersectsMesh(labyrinth, true)) {
-                                var backwards = new BABYLON.Vector3(parseFloat(Math.sin(parseFloat(sphere.rotation.y))) / 10, 0.5, parseFloat(Math.cos(parseFloat(sphere.rotation.y))) / 10);
-                                backwards = backwards.negate();
-                                sphere.moveWithCollisions(backwards);
+                            if(!pavza) {
+                                sphere.computeWorldMatrix(true);
+                                if (!sphere.intersectsMesh(labyrinth, true)) {
+                                    var backwards = new BABYLON.Vector3(parseFloat(Math.sin(parseFloat(sphere.rotation.y))) / 10, 0.5, parseFloat(Math.cos(parseFloat(sphere.rotation.y))) / 10);
+                                    backwards = backwards.negate();
+                                    sphere.moveWithCollisions(backwards);
+                                }
                             }
                         });
                     }
                 }
             }, false);
 
+            meja1 = BABYLON.Mesh.CreatePlane("meja1", 200, scene);
+            meja1.position = new BABYLON.Vector3(-34.697440739293484, -8, -35.73790774292142);
+            meja1.computeWorldMatrix(true);
+
+            meja2 = BABYLON.Mesh.CreatePlane("meja2", 200, scene);
+            meja2.position = new BABYLON.Vector3(-34.697440739293484, -8, 35.73790774292142);
+            meja2.computeWorldMatrix(true);
+
+
+            meja3 = BABYLON.Mesh.CreatePlane("meja3", 200, scene);
+            meja3.position = new BABYLON.Vector3(65.95940911260758, -9, -27.82346783729356);
+            meja3.rotation.y = Math.PI/2;
+            meja3.computeWorldMatrix(true);
+
+            meja4 = BABYLON.Mesh.CreatePlane("meja4", 200, scene);
+            meja4.position = new BABYLON.Vector3(-65, -8, 1.6541122569734954);
+            meja4.rotation.y = Math.PI/2;
+            meja4.computeWorldMatrix(true);
+
+            meja1.isVisible = false;
+            meja2.isVisible = false;
+            meja3.isVisible = false;
+            meja4.isVisible = false;
+
             // nadomestna tla
             var ground = BABYLON.Mesh.CreatePlane("ground", 500.0, scene);
             ground.material = new BABYLON.StandardMaterial("groundMat", scene);
-            ground.material.diffuseColor = new BABYLON.Color3(0, 0, 0);
+            ground.material.diffuseColor = new BABYLON.Color3(0.08, 0.08, 0.08);
             ground.material.backFaceCulling = true;
             ground.position = new BABYLON.Vector3(0, -9.99, 0);
             ground.rotation = new BABYLON.Vector3(Math.PI / 2, 0, 0);
@@ -364,23 +479,82 @@
             skyboxMaterial.position = new BABYLON.Vector3(0, 0, 0);
             skybox.renderingGroupId = 0;
             var startClosed = BABYLON.Mesh.CreateBox("startClosed", 10, scene);
-            startClosed.position = new BABYLON.Vector3(-34.697440739293484, -10, -39.73790774292142);
+            startClosed.position = new BABYLON.Vector3(-35, -10, -38.73790774292142);
             startClosed.checkCollisions = true;
-            startClosed.isVisible = false;
+            startClosed.isVisible = true;
+            var vhod = new BABYLON.StandardMaterial("vhod", scene);
+            vhod.diffuseTexture = new BABYLON.Texture("assets/door1.png", scene);
+            startClosed.material = vhod;
+            startClosed.scaling.y = 1;
+            startClosed.scaling.x = 0.9;
+
+
+
             kljuc = BABYLON.Mesh.CreateBox("kljuc", 0.5, scene);
             kljuc.position = new BABYLON.Vector3(37, -11, 11.5);
             kljuc.isVisible = false;
+            var kljucTex = new BABYLON.StandardMaterial("kTex", scene);
+            kljucTex.diffuseTexture = new BABYLON.Texture("assets/key.png", scene);
+            kljuc.material = kljucTex;
+
             kljuc2 = BABYLON.Mesh.CreateBox("kljuc2", 0.5, scene);
             kljuc2.position = new BABYLON.Vector3(-54, -11, -9);
             kljuc2.isVisible = false;
-            var item1 = BABYLON.Mesh.CreateBox("i1", 0.5, scene);
-            item1.position = new BABYLON.Vector3(-45.483073024119534, -9, -30);
-            var item2 = BABYLON.Mesh.CreateBox("i2", 0.5, scene);
-            item2.position = new BABYLON.Vector3(41.95940911260758, -9, -27.82346783729356);
-            var item3 = BABYLON.Mesh.CreateBox("i3", 0.5, scene);
-            item3.position = new BABYLON.Vector3(42.836697516092684, -9, -6.319501548962687);
-            var item4 = BABYLON.Mesh.CreateBox("i4", 0.5, scene);
-            item4.position = new BABYLON.Vector3(-44.09810739135112, -9, 20.632948101757854);
+            var kljucTex1 = new BABYLON.StandardMaterial("kTex1", scene);
+            kljucTex1.diffuseTexture = new BABYLON.Texture("assets/key.png", scene);
+            kljuc2.material = kljucTex1;
+
+            // ITEMS
+            item1 = BABYLON.Mesh.CreateBox("i1", 0.5, scene);
+            item1.position = new BABYLON.Vector3(-45.483073024119534, -7.5, -30);
+            var item1Tex = new BABYLON.StandardMaterial("i1t", scene);
+            item1Tex.diffuseTexture = new BABYLON.Texture("assets/item1.png", scene);
+            item1.material = item1Tex;
+
+            item2 = BABYLON.Mesh.CreateBox("i2", 0.5, scene);
+            item2.position = new BABYLON.Vector3(41.95940911260758, -7.5, -27.82346783729356);
+            var item2Tex = new BABYLON.StandardMaterial("i2t", scene);
+            item2Tex.diffuseTexture = new BABYLON.Texture("assets/item2.png", scene);
+            item2.material = item2Tex;
+
+            item3 = BABYLON.Mesh.CreateBox("i3", 0.5, scene);
+            item3.position = new BABYLON.Vector3(42.836697516092684, -7.5, -6.319501548962687);
+            var item3Tex = new BABYLON.StandardMaterial("i3t", scene);
+            item3Tex.diffuseTexture = new BABYLON.Texture("assets/item3.png", scene);
+            item3.material = item3Tex;
+
+            item4 = BABYLON.Mesh.CreateBox("i4", 0.5, scene);
+            item4.position = new BABYLON.Vector3(-44.09810739135112, -7.5, 20.632948101757854);
+            var item4Tex = new BABYLON.StandardMaterial("i4t", scene);
+            item4Tex.diffuseTexture = new BABYLON.Texture("assets/item4.png", scene);
+            item4.material = item4Tex;
+
+            scene.beforeRender = function() {
+                if(!pavza) {
+                    item1.rotation.x += 0.05;
+                    item1.rotation.y += 0.05;
+
+                    item2.rotation.x += 0.05;
+                    item2.rotation.y += 0.05;
+
+                    item3.rotation.x += 0.05;
+                    item3.rotation.y += 0.05;
+
+                    item4.rotation.x += 0.05;
+                    item4.rotation.y += 0.05;
+
+                    trapItem.rotation.z -= 0.05;
+                    trapItem.rotation.y -= 0.05;
+
+                    kljuc.rotation.x += 0.05;
+                    kljuc.rotation.y += 0.05;
+
+                    kljuc2.rotation.x += 0.05;
+                    kljuc2.rotation.y += 0.05;
+                }
+            };
+
+
             var pointToIntersect1 = new BABYLON.Vector3(30, -8, 4);
             var pointToIntersect2 = new BABYLON.Vector3(30, -8, 19);
             var pointToIntersect3 = new BABYLON.Vector3(44, -8, 19);
@@ -397,24 +571,8 @@
             var tocka4 = BABYLON.Mesh.CreateBox("t4", 1, scene);
             tocka4.position = pointToIntersect4;
             tocka4.isVisible = false;
-            /*BABYLON.SceneLoader.ImportMesh("", "assets/", "monster1.babylon", scene, function (newMeshes1) {
-             posast = new BABYLON.StandardMaterial("assets/", scene);
-             posast.diffuseTexture = new BABYLON.Texture("assets/monster1.png", scene);
-             posast.diffuseTexture.uScale = 0.5;
-             posast.diffuseTexture.vScale = 0.5;
 
-             for(var i = 0; i < newMeshes1.length; i++) {
-             newMeshes1[i].isVisible = true;
-             newMeshes1[i].checkCollisions = true;
-             newMeshes1[i].scaling = new BABYLON.Vector3(2, 1, 2);
-             newMeshes1[i].position = new BABYLON.Vector3(30, -8, 2);
-             newMeshes1[i].material = posast;
-             }
-             var pInfo = posast.getBoundingInfo().boundingBox;
-             var pBox = pInfo.CreateBox();
-
-             });*/
-            posast = BABYLON.Mesh.CreateBox("p", 1, scene);
+            posast = BABYLON.Mesh.CreateBox("p", 1.2, scene);
             posast.position = new BABYLON.Vector3(30, -8, 2);
             posast.isVisible = false;
             var zPlus = true;
@@ -425,6 +583,10 @@
             tocka2.computeWorldMatrix(true);
             tocka3.computeWorldMatrix(true);
             tocka4.computeWorldMatrix(true);
+
+            var ammoTex = new BABYLON.StandardMaterial("ammoTex", scene);
+            ammoTex.diffuseTexture = new BABYLON.Texture("assets/monsterlayer1.bmp", scene);
+
             scene.registerBeforeRender(function () {
                 if (!pavza) {
                     if (posast.intersectsMesh(tocka1, false)) {
@@ -478,6 +640,7 @@
                     var ammo2 = BABYLON.Mesh.CreateSphere("sphere" + metki, 10, 0.5, scene);
                     ammo2.position = new BABYLON.Vector3(zacX, zacY, zacZ);
                     //ammo2.checkCollisions = true;
+                    ammo2.material = ammoTex;
                     ammo2.computeWorldMatrix(true);
                     premikajMetek(scene, ammo2, metki, zPlus, zMinus, xPlus, xMinus, sphere);
                     metki++;
@@ -489,14 +652,16 @@
             var xPlus1 = false;
             var xMinus1 = false;
             window.addEventListener("keydown", function (evt) {
-                if (evt.keyCode == 32) {
+                if (evt.keyCode == 32 && st==1) {
                     // space bar
                     // pridobis koordinate od pozicije igralca
-                    povecajza1++;
                     var zacX = sphere.position.x;
                     var zacY = sphere.position.y;
                     var zacZ = sphere.position.z;
                     var ammo1 = BABYLON.Mesh.CreateSphere("metki" + metki2, 10, 0.5, scene);
+                    var ammoPlayerTex = new BABYLON.StandardMaterial("ammoPlayerTex", scene);
+                    ammoPlayerTex.diffuseTexture = new BABYLON.Texture("assets/player5.png", scene);
+                    ammo1.material = ammoPlayerTex;
                     if (obrnjenost == 4) {
                         ammo1.position = new BABYLON.Vector3(zacX, zacY, zacZ + 2);
                         zPlus1 = true;
@@ -553,23 +718,52 @@
                         xMinus1 = true;
                         zMinus1 = false;
                     }
-                    //ammo1.checkCollisions = true;
+                    ammo1.checkCollisions = true;
                     ammo1.computeWorldMatrix(true);
                     premikajMetekIgralca(scene, ammo1, metki2, posast, sphere, xPlus1, xMinus1, zPlus1, zMinus1, sefe);
                     metki2++;
+                }
+                else if (evt.keyCode==32 && st == 0) {
+                    napis6.isVisible = false;
+                    napis.isVisible = true;
+                    napis2.isVisible = true;
+                    napis4.isVisible = true;
+                    pavza = false;
+                    st = 1;
+
+                    life1.isVisible = true;
+                    life2.isVisible = true;
+                    life3.isVisible = true;
+                    life4.isVisible = true;
+                    life5.isVisible = true;
                 }
             }, false);
 
             izhod = BABYLON.Mesh.CreateBox("izhod", 10, scene);
             izhod.position = new BABYLON.Vector3(-65, -8, 1.6541122569734954);
             izhod.checkCollisions = true;
+            var door = new BABYLON.StandardMaterial("door", scene);
+            door.diffuseTexture = new BABYLON.Texture("assets/door.png", scene);
+            izhod.material = door;
+            izhod.scaling.y = 1;
+            izhod.scaling.x = 0.8;
+
+
+            var spriteManager = new BABYLON.SpriteManager("sm", "", 1, 1000, scene);
+            spriteManager._spriteTexture = new BABYLON.Texture('assets/monster1.png', scene, true, false);
+            spriteManager._spriteTexture.wrapU = BABYLON.Texture.CLAMP_ADDRESSMODE;
+            spriteManager._spriteTexture.wrapV = BABYLON.Texture.CLAMP_ADDRESSMODE;
+            var monster = new BABYLON.Sprite("textSprite", spriteManager);
+            monster.position = new BABYLON.Vector3(-7.085305363401764, -7, -19.6351173389420747);
+            monster.size = 10;
+
             var tockaSefa1 = BABYLON.Mesh.CreateBox("ts1", 6, scene);
             tockaSefa1.position = new BABYLON.Vector3(-58, -8, 2.6541122569734954);
             tockaSefa1.isVisible = false;
             var tockaSefa2 = BABYLON.Mesh.CreateBox("ts2", 6, scene);
             tockaSefa2.position = new BABYLON.Vector3(-58, -8, -16.14588774302654);
             tockaSefa2.isVisible = false;
-            sefe = BABYLON.Mesh.CreateBox("sefe", 1, scene);
+            sefe = BABYLON.Mesh.CreateBox("sefe", 2.5, scene);
             sefe.isVisible = false;
             sefe.position = new BABYLON.Vector3(-58, -8, -8);
             var zPlusSefe = true;
@@ -606,6 +800,9 @@
                         metki3++;
                         var ammo33 = BABYLON.Mesh.CreateSphere("sm" + metki3, 10, 0.5, scene);
                         metki3++;
+                        ammo31.material = ammoTex;
+                        ammo32.material = ammoTex;
+                        ammo33.material = ammoTex;
                         ammo31.position = new BABYLON.Vector3(zacX, zacY, zacZ - 1);
                         ammo32.position = new BABYLON.Vector3(zacX, zacY, zacZ);
                         ammo33.position = new BABYLON.Vector3(zacX, zacY, zacZ + 1);
@@ -649,9 +846,11 @@
                     if (!pobranItem1) {
                         if (sphere.intersectsMesh(item1, true)) {
                             stevecObjektov++;
-                            alert("You found the " + stevecObjektov + "/4 piece of your past! :O");
+                            //alert("You found the " + stevecObjektov + "/4 piece of your past! :O");
                             item1.dispose();
                             pobranItem1 = true;
+                            itemFound.isVisible = true;
+                            pavza=true;
                             //item1 = null;
                             //console.log(stevecObjektov);
                             if (stevecObjektov == 1) {
@@ -672,9 +871,11 @@
                     if (!pobranItem2) {
                         if (sphere.intersectsMesh(item2, true)) {
                             stevecObjektov++;
-                            alert("You found the " + stevecObjektov + "/4 piece of your past! :O");
+                            //alert("You found the " + stevecObjektov + "/4 piece of your past! :O");
                             item2.dispose();
                             pobranItem2 = true;
+                            itemFound.isVisible = true;
+                            pavza=true;
                             if (stevecObjektov == 1) {
                                 material2.diffuseTexture = new BABYLON.Texture("assets/1.png", scene);
                             } else if (stevecObjektov == 2) {
@@ -693,9 +894,11 @@
                     if (!pobranItem3) {
                         if (sphere.intersectsMesh(item3, true)) {
                             stevecObjektov++;
-                            alert("You found the " + stevecObjektov + "/4 piece of your past! :O");
+                            //alert("You found the " + stevecObjektov + "/4 piece of your past! :O");
                             item3.dispose();
                             pobranItem3 = true;
+                            itemFound.isVisible = true;
+                            pavza=true;
                             if (stevecObjektov == 1) {
                                 material2.diffuseTexture = new BABYLON.Texture("assets/1.png", scene);
                             } else if (stevecObjektov == 2) {
@@ -714,9 +917,11 @@
                     if (!pobranItem4) {
                         if (sphere.intersectsMesh(item4, true)) {
                             stevecObjektov++;
-                            alert("You found the " + stevecObjektov + "/4 piece of your past! :O");
+                            //alert("You found the " + stevecObjektov + "/4 piece of your past! :O");
                             item4.dispose();
                             pobranItem4 = true;
+                            itemFound.isVisible = true;
+                            pavza=true;
                             if (stevecObjektov == 1) {
                                 material2.diffuseTexture = new BABYLON.Texture("assets/1.png", scene);
                             } else if (stevecObjektov == 2) {
@@ -749,14 +954,16 @@
                                 izhod.isVisible = false;
                                 izhod.checkCollisions = false;
                             } else if (!alertHappened) {
-                                alert("To exit, collect all the items!");
+                                //alert("To exit, collect all the items!");
+                                pavza = true;
+                                missingItems.isVisible = true;
                                 alertHappened = true;
                             }
                         }
                     }
                     if (sphere.intersectsMesh(izhod, true)) {
                         if (kljuc2Pobran && stevecObjektov == 4) {
-                            alert("You completed this level!");
+                            //alert("You completed this level!");
                             win();
                         }
                     }
@@ -859,13 +1066,13 @@
             trapCoorY = -9;
             trapCoorZ = 29.29639942001256;
             //var trapItem = BABYLON.Mesh.CreateBox("t1", 1, scene);
-            var trapItem = BABYLON.Mesh.CreateBox("trap1", 1, scene);
+            trapItem = BABYLON.Mesh.CreateBox("trap1", 1, scene);
             trapItem.rotate.z = Math.PI / 2;
             var trapTex = new BABYLON.StandardMaterial("trapTex", scene);
             trapTex.diffuseTexture = new BABYLON.Texture("assets/trap.png", scene);
             trapItem.material = trapTex;
-            trapItem.scaling.y = 0.6;
-            trapItem.scaling.x = 0.6;
+            trapItem.scaling.y = 1;
+            trapItem.scaling.x = 1;
 
             trapItem.position = new BABYLON.Vector3(trapCoorX, trapCoorY, trapCoorZ);
             scene.registerBeforeRender(function () {
@@ -887,9 +1094,9 @@
         var scene = createScene();
 
         engine.runRenderLoop(function () {
-            if (!pavza) {
-                scene.render();
-            }
+            //if (!pavza) {
+            scene.render();
+            //}
         });
 
         window.addEventListener("resize", function () {
@@ -904,38 +1111,38 @@
                 if(!zadet) {
                     if (scene.getMeshByName("metki" + index)) {
                         if (zPlus1 && xPlus1) {
-                            metek.position.z += 0.1;
-                            metek.position.x += 0.1;
+                            metek.position.z += 0.2;
+                            metek.position.x += 0.2;
                         }
                         else if (xPlus1 && zMinus1) {
-                            metek.position.z -= 0.1;
-                            metek.position.x += 0.1;
+                            metek.position.z -= 0.2;
+                            metek.position.x += 0.2;
                         }
                         else if (zMinus1 && xMinus1) {
-                            metek.position.z -= 0.1;
-                            metek.position.x -= 0.1;
+                            metek.position.z -= 0.2;
+                            metek.position.x -= 0.2;
                         }
                         else if (zPlus1 && xMinus1) {
-                            metek.position.z += 0.1;
-                            metek.position.x -= 0.1;
+                            metek.position.z += 0.2;
+                            metek.position.x -= 0.2;
                         }
                         else if (zPlus1) {
-                            metek.position.z += 0.1;
+                            metek.position.z += 0.2;
                         }
                         else if (xPlus1) {
-                            metek.position.x += 0.1;
+                            metek.position.x += 0.2;
                         }
                         else if (zMinus1) {
-                            metek.position.z -= 0.1;
+                            metek.position.z -= 0.2;
                         }
                         else if (xMinus1) {
-                            metek.position.x -= 0.1;
+                            metek.position.x -= 0.2;
                         }
                         if (posast.intersectsMesh(metek, true)) {
                             metek.dispose();
                             stZadetkov--;
                             if (stZadetkov == 0) {
-                                alert("Ubili ste posast! :D");
+                                //alert("Ubili ste posast! :D");
                                 kljuc.position = new BABYLON.Vector3(37, -8, 11.5);
                                 kljuc.isVisible = true;
                                 posast.dispose();
@@ -947,13 +1154,33 @@
                             metek.dispose();
                             stZadetkovSefe--;
                             if (stZadetkovSefe == 0) {
-                                alert("Ubili ste sefa! :D");
+                                //alert("Ubili ste sefa! :D");
                                 sefe.dispose();
                                 kljuc2.position =new BABYLON.Vector3(-54, -8, -9);
                                 kljuc2.isVisible = true;
                                 sefeUbit = true;
                             }
                             zadet = true;
+                        }
+                        if(metek.intersectsMesh(meja1, true)){
+                            metek.dispose();
+                            zadet=true;
+                            //console.log("Disposed");
+                        }
+                        if(metek.intersectsMesh(meja2, true)){
+                            metek.dispose();
+                            zadet=true;
+                            //console.log("Disposed");
+                        }
+                        if(metek.intersectsMesh(meja3, true)){
+                            metek.dispose();
+                            zadet=true;
+                            //console.log("Disposed");
+                        }
+                        if(metek.intersectsMesh(meja4, true)){
+                            metek.dispose();
+                            zadet=true;
+                            //console.log("Disposed");
                         }
                     }
                 }
@@ -968,17 +1195,17 @@
             if(!pavza) {
                 if(!zadet1){
                     //if(scene.getMeshByName("sm"+index-3)){
-                    metek1.position.z -= 0.1;
-                    metek1.position.x += 0.1;
+                    metek1.position.z -= 0.2;
+                    metek1.position.x += 0.2;
                 }
                 if(!zadet2){
                     //if(scene.getMeshByName("sm"+index-2)){
-                    metek2.position.x += 0.1;
+                    metek2.position.x += 0.2;
                 }
                 if(!zadet3){
                     //if(scene.getMeshByName("sm"+index-1)){
-                    metek3.position.z += 0.1;
-                    metek3.position.x += 0.1;
+                    metek3.position.z += 0.2;
+                    metek3.position.x += 0.2;
                 }
                 if (!zadet1) {
                     if (sphere.intersectsMesh(metek1, true)) {
@@ -1003,6 +1230,26 @@
                             //posast.position = start;
                         }
                         zadet1 = true;
+                    }
+                    if(metek1.intersectsMesh(meja1, true)){
+                        metek1.dispose();
+                        zadet1=true;
+                        //console.log("Disposed");
+                    }
+                    if(metek1.intersectsMesh(meja2, true)){
+                        metek1.dispose();
+                        zadet1=true;
+                        //console.log("Disposed");
+                    }
+                    if(metek1.intersectsMesh(meja3, true)){
+                        metek1.dispose();
+                        zadet1=true;
+                        //console.log("Disposed");
+                    }
+                    if(metek1.intersectsMesh(meja4, true)){
+                        metek1.dispose();
+                        zadet1=true;
+                        //console.log("Disposed");
                     }
                 }
                 if (!zadet2) {
@@ -1029,6 +1276,26 @@
                         }
                         zadet2 = true;
                     }
+                    if(metek2.intersectsMesh(meja1, true)){
+                        metek2.dispose();
+                        zadet2=true;
+                        //console.log("Disposed");
+                    }
+                    if(metek2.intersectsMesh(meja2, true)){
+                        metek2.dispose();
+                        zadet2=true;
+                        //console.log("Disposed");
+                    }
+                    if(metek2.intersectsMesh(meja3, true)){
+                        metek2.dispose();
+                        zadet2=true;
+                        //console.log("Disposed");
+                    }
+                    if(metek2.intersectsMesh(meja4, true)){
+                        metek2.dispose();
+                        zadet2=true;
+                        //console.log("Disposed");
+                    }
                 }
                 if (!zadet3) {
                     if (sphere.intersectsMesh(metek3, true)) {
@@ -1054,6 +1321,26 @@
                         }
                         zadet3 = true;
                     }
+                    if(metek3.intersectsMesh(meja1, true)){
+                        metek3.dispose();
+                        zadet3=true;
+                        //console.log("Disposed");
+                    }
+                    if(metek3.intersectsMesh(meja2, true)){
+                        metek3.dispose();
+                        zadet3=true;
+                        //console.log("Disposed");
+                    }
+                    if(metek3.intersectsMesh(meja3, true)){
+                        metek3.dispose();
+                        zadet3=true;
+                        //console.log("Disposed");
+                    }
+                    if(metek3.intersectsMesh(meja4, true)){
+                        metek3.dispose();
+                        zadet3=true;
+                        //console.log("Disposed");
+                    }
                 }
             }
         });
@@ -1065,18 +1352,18 @@
                 if (!zadet) {
                     if (scene.getMeshByName("sphere" + index)) {
                         if (zPlus) {
-                            metek.position.z -= 0.1;
+                            metek.position.z -= 0.2;
                         }
                         if (zMinus) {
-                            metek.position.x -= 0.1;
+                            metek.position.x -= 0.2;
                         }
                         if (xPlus) {
-                            metek.position.x -= 0.1;
-                            metek.position.z -= 0.1;
+                            metek.position.x -= 0.2;
+                            metek.position.z -= 0.2;
                         }
                         if (xMinus) {
-                            metek.position.x -= 0.1;
-                            metek.position.z += 0.1
+                            metek.position.x -= 0.2;
+                            metek.position.z += 0.2
                         }
                         if (sphere.intersectsMesh(metek, true)) {
                             metek.dispose();
@@ -1101,9 +1388,26 @@
                             }
                             zadet = true;
                         }
-                        /*if(metek.intersectsMesh(,true)){
-
-                        }*/
+                        if(metek.intersectsMesh(meja1, true)){
+                            metek.dispose();
+                            zadet=true;
+                            //console.log("Disposed");
+                        }
+                        if(metek.intersectsMesh(meja2, true)){
+                            metek.dispose();
+                            zadet=true;
+                            //console.log("Disposed");
+                        }
+                        if(metek.intersectsMesh(meja3, true)){
+                            metek.dispose();
+                            zadet=true;
+                            //console.log("Disposed");
+                        }
+                        if(metek.intersectsMesh(meja4, true)){
+                            metek.dispose();
+                            zadet=true;
+                            //console.log("Disposed");
+                        }
                     }
                 }
             }
@@ -1117,8 +1421,25 @@
             }
         },false);
     }
-    function win(){
+    function win() {
         pavza = true;
+        napis7.isVisible = true;
+        napis6.isVisible = false;
+        napis.isVisible = false;
+        napis2.isVisible = false;
+        napis4.isVisible = false;
+        napis3.isVisible = false;
+        napis5.isVisible = false;
+        life1.isVisible = false;
+        life2.isVisible = false;
+        life3.isVisible = false;
+        life4.isVisible = false;
+        life5.isVisible = false;
+        window.addEventListener("keydown", function(evt) {
+            if(evt.keyCode == 32) {
+                history.go(0);
+            }
+        }, false);
     }
 
 </script>
