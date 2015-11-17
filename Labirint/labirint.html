@@ -31,6 +31,7 @@
 </div>
 <script type="text/javascript">
     var stevecObjektov = 0;
+    var hitrost= 0;
     var posastStrela=false;
     var sefeStrela=false;
     var tockaVklopa2;
@@ -53,6 +54,8 @@
     var meja4;
     var napis, napis2, napis3, napis4, napis5, napis6, napis7;
     var item1, item2, item3, item4, trapItem, itemFound, missingItems;
+    var ljudek;
+    var music, gr, sad, victory, gr2;
 
     if (BABYLON.Engine.isSupported()) {
         var canvas = document.getElementById("renderCanvas");
@@ -117,7 +120,7 @@
 
             });*/
             sphere.isVisible=false;
-            BABYLON.SceneLoader.ImportMesh("", "assets/", "player.babylon", scene, function (newMeshes0) {
+            BABYLON.SceneLoader.ImportMesh("", "assets/", "player1.babylon", scene, function (newMeshes0) {
                 player = new BABYLON.StandardMaterial("assets/", scene);
                 player.diffuseTexture = new BABYLON.Texture("assets/player5.png", scene);
                 player.diffuseTexture.uScale = 1;
@@ -127,15 +130,23 @@
 
                     //newMeshes0[i].checkCollisions = true;
                     newMeshes0[i].scaling = new BABYLON.Vector3(2, 2, 2);
-                    newMeshes0[i].position = new BABYLON.Vector3(-34.697440739293484, -8, -40.73790774292142);
-                    //newMeshes0[i].rotation.y = Math.PI;
+                    //newMeshes0[i].position = start;
+                    newMeshes0[i].position.x = start.x;
+                    newMeshes0[i].position.y = -7.9;
+                    newMeshes0[i].position.z = start.z;
+                    newMeshes0[i].rotation.y = Math.PI/2;
                     //newMeshes0[i].parent = sphere;
+
                     newMeshes0[i].isVisible = true;
                     newMeshes0[i].material = player;
                 }
+                ljudek=newMeshes0[0];
                 scene.registerBeforeRender(function(){
-                    newMeshes0[0].position = sphere.position;
-                    newMeshes0[0].rotation = sphere.rotation;
+                    //newMeshes0[0].position = sphere.position;
+                    newMeshes0[0].position.x = sphere.position.x;
+                    newMeshes0[0].position.y = -7.9;
+                    newMeshes0[0].position.z = sphere.position.z;
+                    //newMeshes0[0].rotation = sphere.rotation;
                     //newMeshes0[0].rotation.y = Math.PI;
                 });
             });
@@ -147,7 +158,7 @@
 
                 for(var i = 0; i < newMeshes1.length; i++) {
                     newMeshes1[i].isVisible = true;
-                    newMeshes1[i].checkCollisions = true;
+                    //newMeshes1[i].checkCollisions = true;
                     newMeshes1[i].scaling = new BABYLON.Vector3(1, 0.3, 1);
                     newMeshes1[i].position = new BABYLON.Vector3(30, -8, 2);
                     newMeshes1[i].material = posast1;
@@ -169,7 +180,7 @@
 
                 for(var i = 0; i < newMeshes2.length; i++) {
                     newMeshes2[i].isVisible = true;
-                    newMeshes2[i].checkCollisions = true;
+                    //newMeshes2[i].checkCollisions = true;
                     newMeshes2[i].scaling = new BABYLON.Vector3(0.1, 0.1, 0.1);
                     //newMeshes2[i].position = new BABYLON.Vector3(-34.697440739293484, -8, -38.73790774292142);
                     newMeshes2[i].material = treeM;
@@ -184,6 +195,54 @@
                     }
                 });
             });
+            gr = new BABYLON.Sound("monster", "assets/monster.mp3", scene, function() {
+                gr.play();
+                gr.stop();
+            });
+            win = new BABYLON.Sound("win", "assets/victory.mp3", scene, function() {
+                win.play();
+                win.stop();
+            });
+            over = new BABYLON.Sound("monster", "assets/sad.mp3", scene, function() {
+                over.play();
+                over.stop();
+            });
+            var volume = 0.75;
+            music = new BABYLON.Sound("creepy", "assets/music.mp3", scene, function() {
+
+                music.stop();
+            }, { loop: true, autoplay: true, volume: volume });
+            gr2 = new BABYLON.Sound("monster", "assets/dies.mp3", scene, function() {
+                gr2.play();
+                gr2.stop();
+            });
+            BABYLON.SceneLoader.ImportMesh("", "assets/", "rolka5babylon.babylon", scene, function (newMeshes5) {
+                var rolka = new BABYLON.StandardMaterial("assets/", scene);
+                rolka.diffuseTexture = new BABYLON.Texture("assets/skejt.png", scene);
+                rolka.diffuseTexture.uScale = 1;
+                rolka.diffuseTexture.vScale = 1;
+
+                for(var i = 0; i < newMeshes5.length; i++) {
+                    newMeshes5[i].isVisible = true;
+                    //newMeshes5[i].checkCollisions = true;
+                    newMeshes5[i].scaling = new BABYLON.Vector3(0.8, 1, 0.8);
+                    newMeshes5[i].position = new BABYLON.Vector3(-34.697440739293484, -9.98, -31.73790774292142);
+                    newMeshes5[i].material = rolka;
+                }
+
+                scene.registerBeforeRender(function () {
+                    //for(var i = 0; i < newMeshes5.length; i++) {
+                        newMeshes5[0].position.x = sphere.position.x;
+                        newMeshes5[0].position.y = -9.98;
+                        newMeshes5[0].position.z = sphere.position.z;
+                        newMeshes5[0].rotation = sphere.rotation;
+
+
+                    //}
+                });
+
+            });
+
             //MEMORY BAR
             life1 = BABYLON.Mesh.CreatePlane("life1", 0.15, scene);
             life11 = new BABYLON.StandardMaterial("1", scene);
@@ -347,27 +406,36 @@
                     if (evt.keyCode == 65) {//levo
                         if (obrnjenost == 0) {
                             sphere.rotation.y = 7 * (Math.PI / 4);
+                            ljudek.rotation.y = 5 * (Math.PI / 4);
                         }
                         else if (obrnjenost == 1) {
                             sphere.rotation.y = 0;
+                            ljudek.rotation.y = -Math.PI/2;
                         }
                         else if (obrnjenost == 2) {
                             sphere.rotation.y = Math.PI / 4;
+                            ljudek.rotation.y = -Math.PI / 4;
                         }
                         else if (obrnjenost == 3) {
                             sphere.rotation.y = Math.PI / 2;
+                            ljudek.rotation.y = 0;
                         }
                         else if (obrnjenost == 4) {
                             sphere.rotation.y = 3 * (Math.PI / 4);
+                            ljudek.rotation.y = Math.PI / 4;
                         }
                         else if (obrnjenost == 5) {
                             sphere.rotation.y = Math.PI;
+                            ljudek.rotation.y = Math.PI / 2;
                         }
                         else if (obrnjenost == 6) {
                             sphere.rotation.y = 5 * (Math.PI / 4);
+                            ljudek.rotation.y = 3 * (Math.PI / 4);
+
                         }
                         else if (obrnjenost == 7) {
                             sphere.rotation.y = 3 * (Math.PI / 2);
+                            ljudek.rotation.y = Math.PI;
                         }
                         obrnjenost--;
                         if (obrnjenost < 0) {
@@ -377,27 +445,35 @@
                     if (evt.keyCode == 68) {//desno
                         if (obrnjenost == 0) {
                             sphere.rotation.y = Math.PI / 4;
+                            ljudek.rotation.y = -Math.PI / 4;
                         }
                         else if (obrnjenost == 1) {
                             sphere.rotation.y = Math.PI / 2;
+                            ljudek.rotation.y = 0;
                         }
                         else if (obrnjenost == 2) {
                             sphere.rotation.y = 3 * (Math.PI / 4);
+                            ljudek.rotation.y = Math.PI / 4;
                         }
                         else if (obrnjenost == 3) {
                             sphere.rotation.y = Math.PI;
+                            ljudek.rotation.y = Math.PI / 2;
                         }
                         else if (obrnjenost == 4) {
                             sphere.rotation.y = 5 * (Math.PI / 4);
+                            ljudek.rotation.y = 3 * (Math.PI / 4);
                         }
                         else if (obrnjenost == 5) {
                             sphere.rotation.y = 3 * (Math.PI / 2);
+                            ljudek.rotation.y = Math.PI;
                         }
                         else if (obrnjenost == 6) {
                             sphere.rotation.y = 7 * (Math.PI / 4);
+                            ljudek.rotation.y = 5 * (Math.PI / 4);
                         }
                         else if (obrnjenost == 7) {
                             sphere.rotation.y = 0;
+                            ljudek.rotation.y = -Math.PI/2;
                         }
                         obrnjenost++;
                         if (obrnjenost > 7) {
@@ -407,6 +483,7 @@
                     if (evt.keyCode == 83) {//naprej
                         scene.registerBeforeRender(function () {
                             if(!pavza) {
+                                hitrost++;
                                 sphere.computeWorldMatrix(true);
                                 if (!sphere.intersectsMesh(labyrinth, true)) {
                                     var forward = new BABYLON.Vector3(parseFloat(Math.sin(parseFloat(sphere.rotation.y))) / 10, -0.5, parseFloat(Math.cos(parseFloat(sphere.rotation.y))) / 10);
@@ -418,6 +495,7 @@
                     if (evt.keyCode == 87) {//nazaj
                         scene.registerBeforeRender(function () {
                             if(!pavza) {
+                                hitrost--;
                                 sphere.computeWorldMatrix(true);
                                 if (!sphere.intersectsMesh(labyrinth, true)) {
                                     var backwards = new BABYLON.Vector3(parseFloat(Math.sin(parseFloat(sphere.rotation.y))) / 10, 0.5, parseFloat(Math.cos(parseFloat(sphere.rotation.y))) / 10);
@@ -482,6 +560,7 @@
             startClosed.position = new BABYLON.Vector3(-35, -10, -38.73790774292142);
             startClosed.checkCollisions = true;
             startClosed.isVisible = true;
+            //startClosed.isVisible = false;
             var vhod = new BABYLON.StandardMaterial("vhod", scene);
             vhod.diffuseTexture = new BABYLON.Texture("assets/door1.png", scene);
             startClosed.material = vhod;
@@ -651,8 +730,15 @@
             var zMinus1 = false;
             var xPlus1 = false;
             var xMinus1 = false;
+
+            var strel = new BABYLON.Sound("Gunshot", "assets/pop1.wav", scene, function () {
+                strel.play();
+                strel.stop();
+            });
+
             window.addEventListener("keydown", function (evt) {
                 if (evt.keyCode == 32 && st==1) {
+                    strel.play();
                     // space bar
                     // pridobis koordinate od pozicije igralca
                     var zacX = sphere.position.x;
@@ -718,7 +804,7 @@
                         xMinus1 = true;
                         zMinus1 = false;
                     }
-                    ammo1.checkCollisions = true;
+                    //ammo1.checkCollisions = true;
                     ammo1.computeWorldMatrix(true);
                     premikajMetekIgralca(scene, ammo1, metki2, posast, sphere, xPlus1, xMinus1, zPlus1, zMinus1, sefe);
                     metki2++;
@@ -730,7 +816,7 @@
                     napis4.isVisible = true;
                     pavza = false;
                     st = 1;
-
+                    music.play();
                     life1.isVisible = true;
                     life2.isVisible = true;
                     life3.isVisible = true;
@@ -990,6 +1076,7 @@
                 if (!pavza) {
                     if (sphere.intersectsMesh(tockaVklopaSefe1, true)) {
                         sefeStrela = true;
+                        gr.play();
                         //console.log(posastStrela);
                     }
                     if (sphere.intersectsMesh(tockaIzklopaSefe1, true)) {
@@ -1037,6 +1124,7 @@
                 if (!pavza) {
                     if (sphere.intersectsMesh(tockaVklopa1, true)) {
                         posastStrela = true;
+                        gr.play();
                         //console.log(posastStrela);
                     }
                     if (sphere.intersectsMesh(tockaVklopa2, true)) {
@@ -1106,6 +1194,7 @@
     }
     function premikajMetekIgralca(scene, metek, index, posast,sphere,xPlus1,xMinus1,zPlus1,zMinus1, sefe){
         var zadet=false;
+        var zivi=true;
         scene.registerBeforeRender(function(){
             if(!pavza) {
                 if(!zadet) {
@@ -1145,6 +1234,7 @@
                                 //alert("Ubili ste posast! :D");
                                 kljuc.position = new BABYLON.Vector3(37, -8, 11.5);
                                 kljuc.isVisible = true;
+                                gr2.play();
                                 posast.dispose();
                                 ubita = true;
                             }
@@ -1155,6 +1245,7 @@
                             stZadetkovSefe--;
                             if (stZadetkovSefe == 0) {
                                 //alert("Ubili ste sefa! :D");
+                                gr2.play();
                                 sefe.dispose();
                                 kljuc2.position =new BABYLON.Vector3(-54, -8, -9);
                                 kljuc2.isVisible = true;
@@ -1182,6 +1273,15 @@
                             zadet=true;
                             //console.log("Disposed");
                         }
+                        var stevec = 0;
+                        setInterval(function(){
+                            if(stevec > 0){
+                                metek.dispose();
+                                zadet=true;
+                            }else{
+                                stevec++;
+                            }
+                        }, 5000);
                     }
                 }
             }
@@ -1251,6 +1351,10 @@
                         zadet1=true;
                         //console.log("Disposed");
                     }
+                    if(sefeUbit){
+                        metek1.dispose();
+                        zadet1=true;
+                    }
                 }
                 if (!zadet2) {
                     if (sphere.intersectsMesh(metek2, true)) {
@@ -1296,6 +1400,10 @@
                         zadet2=true;
                         //console.log("Disposed");
                     }
+                    if(sefeUbit){
+                        metek2.dispose();
+                        zadet2=true;
+                    }
                 }
                 if (!zadet3) {
                     if (sphere.intersectsMesh(metek3, true)) {
@@ -1340,6 +1448,10 @@
                         metek3.dispose();
                         zadet3=true;
                         //console.log("Disposed");
+                    }
+                    if(sefeUbit){
+                        metek3.dispose();
+                        zadet3=true;
                     }
                 }
             }
@@ -1408,12 +1520,18 @@
                             zadet=true;
                             //console.log("Disposed");
                         }
+                        if(ubita){
+                            metek.dispose();
+                            zadet=true;
+                        }
                     }
                 }
             }
         });
     }
     function lose() {
+        music.stop();
+        over.play();
         napis3.isVisible = true;
         window.addEventListener("keydown", function(evt) {
             if(evt.keyCode == 32) {
@@ -1422,6 +1540,8 @@
         },false);
     }
     function win() {
+        music.stop();
+        win.play();
         pavza = true;
         napis7.isVisible = true;
         napis6.isVisible = false;
