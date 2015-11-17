@@ -1355,6 +1355,15 @@
                         metek1.dispose();
                         zadet1=true;
                     }
+                    var stevec = 0;
+                    setInterval(function(){
+                        if(stevec > 0){
+                            metek1.dispose();
+                            zadet1=true;
+                        }else{
+                            stevec++;
+                        }
+                    }, 5000);
                 }
                 if (!zadet2) {
                     if (sphere.intersectsMesh(metek2, true)) {
@@ -1404,6 +1413,15 @@
                         metek2.dispose();
                         zadet2=true;
                     }
+                    var stevec = 0;
+                    setInterval(function(){
+                        if(stevec > 0){
+                            metek2.dispose();
+                            zadet2=true;
+                        }else{
+                            stevec++;
+                        }
+                    }, 5000);
                 }
                 if (!zadet3) {
                     if (sphere.intersectsMesh(metek3, true)) {
@@ -1453,6 +1471,15 @@
                         metek3.dispose();
                         zadet3=true;
                     }
+                    var stevec = 0;
+                    setInterval(function(){
+                        if(stevec > 0){
+                            metek3.dispose();
+                            zadet3=true;
+                        }else{
+                            stevec++;
+                        }
+                    }, 5000);
                 }
             }
         });
@@ -1524,6 +1551,15 @@
                             metek.dispose();
                             zadet=true;
                         }
+                        var stevec = 0;
+                        setInterval(function(){
+                            if(stevec > 0){
+                                metek.dispose();
+                                zadet=true;
+                            }else{
+                                stevec++;
+                            }
+                        }, 5000);
                     }
                 }
             }
