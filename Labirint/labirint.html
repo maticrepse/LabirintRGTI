@@ -56,6 +56,7 @@
     var item1, item2, item3, item4, trapItem, itemFound, missingItems;
     var ljudek;
     var music, gr, sad, victory, gr2;
+    var restart;
 
     if (BABYLON.Engine.isSupported()) {
         var canvas = document.getElementById("renderCanvas");
@@ -390,6 +391,19 @@
             missingItems.isVisible = false;
             missingItems.renderingGroupId = 1;
 
+
+            restart = BABYLON.Mesh.CreatePlane("bar", 0.25, scene, false);
+            var restartMat = new BABYLON.StandardMaterial("rBar", scene);
+            restartMat.diffuseTexture = new BABYLON.Texture("assets/restart.png", scene);
+            restart.material = restartMat;
+            restart.scaling.x = 4.5;
+            restart.scaling.y = 0.55;
+            restart.parent = camera;
+            restart.position = new BABYLON.Vector3(1.98, -1.0, 3);
+            restart.rotation = new BABYLON.Vector3(0, 0, 0);
+            restart.isVisible = false;
+            restart.renderingGroupId = 1;
+
             window.addEventListener("keydown", function (evt) {
                 if (evt.keyCode == 27 && pavza) {
                     pavza = false;
@@ -399,6 +413,9 @@
                 } else if (evt.keyCode == 27 && !pavza) {
                     pavza = true;
                     napis5.isVisible = true;
+                }
+                if (evt.keyCode == 82) {
+                    history.go(0);
                 }
             }, false);
             window.addEventListener("keydown", function (evt) {
@@ -814,6 +831,7 @@
                     napis.isVisible = true;
                     napis2.isVisible = true;
                     napis4.isVisible = true;
+                    restart.isVisible = true;
                     pavza = false;
                     st = 1;
                     music.play();
@@ -1583,6 +1601,7 @@
         music.stop();
         win.play();
         pavza = true;
+        restart.isVisible = false;
         napis7.isVisible = true;
         napis6.isVisible = false;
         napis.isVisible = false;
