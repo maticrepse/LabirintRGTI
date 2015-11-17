@@ -1050,7 +1050,7 @@
                     if (sphere.intersectsMesh(izhod, true)) {
                         if (kljuc2Pobran && stevecObjektov == 4) {
                             //alert("You completed this level!");
-                            win();
+                            winWin();
                         }
                     }
                 }
@@ -1076,7 +1076,9 @@
                 if (!pavza) {
                     if (sphere.intersectsMesh(tockaVklopaSefe1, true)) {
                         sefeStrela = true;
-                        gr.play();
+                        if(!sefeUbit){
+                            gr.play();
+                        }
                         //console.log(posastStrela);
                     }
                     if (sphere.intersectsMesh(tockaIzklopaSefe1, true)) {
@@ -1124,7 +1126,9 @@
                 if (!pavza) {
                     if (sphere.intersectsMesh(tockaVklopa1, true)) {
                         posastStrela = true;
-                        gr.play();
+                        if(!ubita){
+                            gr.play();
+                        }
                         //console.log(posastStrela);
                     }
                     if (sphere.intersectsMesh(tockaVklopa2, true)) {
@@ -1575,7 +1579,7 @@
             }
         },false);
     }
-    function win() {
+    function winWin() {
         music.stop();
         win.play();
         pavza = true;
